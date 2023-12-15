@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Invoice</title>
+
+
+    <style>
+
+        @page {
+            size: A4;
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+
+            @top-center {
+                content: "Ecommerce Shopping";
+            }
+
+            @bottom-right {
+                content: "Page " counter(page) " of  " counter(pages);
+            }
+
+
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+
+<section>
+    <h2>Invoices List</h2>
+
+    <table class="table">
+        <thead class="thead">
+        <tr>
+            <th>No</th>
+            <th>invoice_number</th>
+            <th>created_at</th>
+            <th>total_amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoices in invoice %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{invoices.invoice_number}}</td>
+            <td>{{invoices.created_at}}</td>
+            <td>{{invoices.total_amount}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+</body>
+</html>
+
+
+
+
+

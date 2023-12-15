@@ -1,0 +1,234 @@
+{% extends 'pages/index.html' %}
+{% load static%}
+
+{% block content %}
+
+<style>
+/* Remove default input styles */
+input[type="text"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px;
+    width: 100%;
+
+    /* Adjust font size as needed */
+  /* Add any other styles you prefer */
+}
+input[type="email"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px;
+
+
+  /* Add any other styles you prefer */
+}
+input[type="password"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px; /* Adjust font size as needed */
+  /* Add any other styles you prefer */
+}
+
+input {
+      width: 100%;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+
+</style>
+
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'home:home' %}">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                    class="text-black">Cart</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'success' %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% elif message.tags == 'error' %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{message}}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
+    <div class="">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post" action="{% url 'card:add_order' %}">
+                {% csrf_token %}
+                {% if items %}
+                <div class="site-blocks-table">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="product-name">Product</th>
+                            <th class="product-thumbnail">Color</th>
+                            <th class="product-size">Size</th>
+                            <th class="product-quantity">Quantity</th>
+                            <th class="product-price">Price</th>
+                            <th class="product-total">Total</th>
+                            <th class="product-remove">Remove</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td class="product-name">
+                                <h2 class="h5 text-black"><input type="text" name="product_name" value="{{item.product_name}}" aria-describedby="emailHelp" readonly></h2>
+                            </td>
+                            <td class="product-thumbnail">
+                                <input type="text" name="product_color" value="{{item.color}}" aria-describedby="emailHelp" readonly>
+                            </td>
+                            <td class="product-size"><input type="text" name="product_size" value="{{item.size}}" aria-describedby="emailHelp" readonly></td>
+                            <td>
+                                <div class="input-group mb-3" style="max-width: 120px;">
+                                    <div class="input-group-prepend">
+
+                                    </div>
+                                    <input type="text" class="form-control text-center" name="product_quantity" value="{{item.quantity}}"
+                                           placeholder=""
+                                           aria-label="Example text with button addon" aria-describedby="button-addon1">
+                                    <div class="input-group-append">
+
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td class="product-price"><input type="text" name="product_price" value="{{item.price}}" aria-describedby="emailHelp" readonly></td>
+                            <td class="product-price"><input type="text" name="product_total_price" value="{{item.total_price}}" aria-describedby="emailHelp" readonly></td>
+                            <td>
+                                <a href="{% url 'card:delete_item_card' item.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                <a href="" class="btn btn-info" data-toggle="modal" data-target="#updateproductModal_{{item.id}}"><i class="fas fa-edit"></i></a>
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                        <div class="modal fade" id="deleteproductModal_{{item.id}}" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteproductModal_{{item.id}}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <form method="post" action="">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteproductModal_{{item.id}}Label">Delete This
+                                                Product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <input type="text" name="edtxt_delete_cart_id" id="edtxt_delete_cart_id_{{item.id}}" value="{{item.id}}">
+                                                
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button type="submit" class="btn btn-danger">Delete changes</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="updateproductModal_{{item.id}}" tabindex="-1" role="dialog"
+                             aria-labelledby="updateproductModal_{{item.id}}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <form method="post" action="{% url 'card:edit_item_card' %}">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateproductModal_{{item.id}}Label">Delete This
+                                                Product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id_item" id="{{item.id}}" value="{{item.id}}">
+                                            <div class="input-group mb-3" style="max-width: 120px;">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-outline-primary js-btn-minus" type="button">
+                                                        &minus;
+                                                    </button>
+                                                </div>
+                                                <input type="number" class="form-control text-center"
+                                                       name="edtxt_quantity" value="{{item.quantity}}"
+                                                       placeholder=""
+                                                       aria-label="Example text with button addon"
+                                                       aria-describedby="button-addon1">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary js-btn-plus" type="button">
+                                                        &plus;
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                            </button>
+                                            <button name="btn_update" type="submit" class="btn btn-danger">Edit
+                                                changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    </table>
+
+                </div>
+                {% else %}
+                <p>there is nothing to show</p>
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12 text-right border-bottom mb-5">
+                                    <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <span class="text-black">Total</span>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <strong class="text-black"><input type="text" name="product_totally" value="{{totally}}" aria-describedby="emailHelp" readonly></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button name="btn_add_order" class="btn btn-primary btn-lg py-3 btn-block" >Proceed To Checkout</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

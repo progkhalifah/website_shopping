@@ -1,0 +1,33 @@
+{% extends 'pages/index.html' %}
+
+{% block content %}
+<div class="container">
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'success' %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>{{message}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% elif message.tags == 'error' %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>{{message}}</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+
+  <h1>Django and Twilio Verify Demo</h1>
+  <p>Hello {{ request.user.first_name }}, you are a verified user!</p>
+  <a href="{% url 'accounts:signout' %}">log out</a>
+  </br>
+  <a href="{% url 'accounts:password_change' %}">change password</a>
+
+</div>
+
+{% endblock %}

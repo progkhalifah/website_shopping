@@ -1,0 +1,222 @@
+{% extends 'pages/index.html' %}
+{% load static%}
+
+{% block content %}
+
+<style>
+/* Remove default input styles */
+input[type="text"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px; /* Adjust font size as needed */
+  /* Add any other styles you prefer */
+}
+input[type="email"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px; /* Adjust font size as needed */
+  /* Add any other styles you prefer */
+}
+input[type="password"] {
+  border: none;
+  background: none;
+  outline: none; /* Remove the input field's focus border */
+  font-size: 24px; /* Adjust font size as needed */
+  /* Add any other styles you prefer */
+}
+
+</style>
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong
+                    class="text-black">{{productshop.name_product}}</strong></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}<strong><a href="">See cart</a></strong> Or you can continue shopping.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{productshop.image_product.url}}" alt="Image" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" name="product_name" value="{{productshop.name_product}}"
+                               aria-describedby="emailHelp" readonly>
+                        <input type="text" name="product_desc" value="{{productshop.describe_product}}"
+                               aria-describedby="emailHelp" readonly>
+                        <input class="text-primary h4" type="text" name="product_price"
+                               value="{{productshop.price_product}}" readonly>
+                    </div>
+                    <div class="mb-1 d-flex">
+                        {% for color in colorshop%}
+                        <label for="color.name_color" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
+                                                                                                           id="color.name_color"
+                                                                                                           name="product_color"
+                                                                                                           value="{{color.name_color}}"></span>
+                            <span class="d-inline-block text-black">{{color.name_color}}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-1 d-flex">
+                        {% for size in sizeshop%}
+                        <label for="size.name_size" class="d-flex mr-3 mb-3">
+                            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
+                                                                                                           id="size.name_size"
+                                                                                                           name="product_size"
+                                                                                                           value="{{size.name_size}}"></span>
+                            <span class="d-inline-block text-black">{{size.name_size}}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-5">
+                        <div class="input-group mb-3" style="max-width: 120px;">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                            </div>
+                            <input type="text" class="form-control text-center" value="1" placeholder=""
+                                   name="product_quantity" aria-label="Example text with button addon"
+                                   aria-describedby="button-addon1">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="buy-now btn btn-sm btn-primary" name="btn_add_item">Add To Cart</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section block-3 site-blocks-2 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 site-section-heading text-center pt-4">
+                <h2>Featured Products</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nonloop-block-3 owl-carousel">
+                    <div class="item">
+                        <div class="block-4 text-center">
+                            <figure class="block-4-image">
+                                <img src="{% static 'images/cloth_1.jpg' %}" alt="Image placeholder" class="img-fluid">
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="#">Tank Top</a></h3>
+                                <p class="mb-0">Finding perfect t-shirt</p>
+                                <p class="text-primary font-weight-bold">$50</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="block-4 text-center">
+                            <figure class="block-4-image">
+                                <img src="{% static 'images/shoe_1.jpg' %}" alt="Image placeholder" class="img-fluid">
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="#">Corater</a></h3>
+                                <p class="mb-0">Finding perfect products</p>
+                                <p class="text-primary font-weight-bold">$50</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="block-4 text-center">
+                            <figure class="block-4-image">
+                                <img src="{% static 'images/cloth_2.jpg' %}" alt="Image placeholder" class="img-fluid">
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="#">Polo Shirt</a></h3>
+                                <p class="mb-0">Finding perfect products</p>
+                                <p class="text-primary font-weight-bold">$50</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="block-4 text-center">
+                            <figure class="block-4-image">
+                                <img src="{% static 'images/cloth_3.jpg' %}" alt="Image placeholder" class="img-fluid">
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="#">T-Shirt Mockup</a></h3>
+                                <p class="mb-0">Finding perfect products</p>
+                                <p class="text-primary font-weight-bold">$50</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="block-4 text-center">
+                            <figure class="block-4-image">
+                                <img src="{% static 'images/shoe_1.jpg' %}" alt="Image placeholder" class="img-fluid">
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="#">Corater</a></h3>
+                                <p class="mb-0">Finding perfect products</p>
+                                <p class="text-primary font-weight-bold">$50</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
+{% comment "This is the button notification with sound" %}
+<!--<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <button type="button" id="successtoast" class="btn btn-success btn-icon-text"><i
+                    class="fa fa-check btn-icon-prepend"></i>Toast Notification success
+            </button>
+            <button type="button" id="infotoast" class="btn btn-info btn-icon-text"><i
+                    class="fa fa-check btn-icon-prepend"></i>Toast Notification info
+            </button>
+            <button type="button" id="warningtoast" class="btn btn-warning btn-icon-text"><i
+                    class="fa fa-check btn-icon-prepend"></i>Toast Notification warning
+            </button>
+            <button type="button" id="errortoast" class="btn btn-primary btn-icon-text"><i
+                    class="fa fa-check btn-icon-prepend"></i>Toast Notification error
+            </button>
+        </div>
+    </div>
+</div>-->
+{% endcomment %}
